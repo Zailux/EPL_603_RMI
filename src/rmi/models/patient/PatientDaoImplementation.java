@@ -1,7 +1,6 @@
-package rmi.database.models;
+package rmi.models.patient;
 
 import rmi.database.Postgres;
-import rmi.database.models.PatientDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

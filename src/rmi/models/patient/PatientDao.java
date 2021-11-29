@@ -1,4 +1,4 @@
-package rmi.database.models;
+package rmi.models.patient;
 
 import java.sql.SQLException;
 import java.util.List;

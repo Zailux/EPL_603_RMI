@@ -1,6 +1,8 @@
-package rmi.database.models;
+package rmi.models.patient;
 
-public class Patient {
+import java.io.Serializable;
+
+public class Patient implements Serializable {
 
     int id;
     String name;
@@ -8,7 +10,7 @@ public class Patient {
     Boolean historyOfSelfHarm;
     String riskIndicator;
 
-    public Patient() {}
+    public Patient () {}
 
     public Patient(String name, String address, Boolean historyOfSelfHarm, String riskIndicator)
     {

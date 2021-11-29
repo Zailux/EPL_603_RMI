@@ -1,6 +1,6 @@
 package rmi;
-import rmi.database.models.Patient;
-import rmi.database.models.PatientDaoImplementation;
+
+import rmi.services.patient.PatientServant;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -12,12 +12,13 @@ public  class ApplicationServer {
 
         Registry registry = LocateRegistry.createRegistry(5099);
         registry.rebind("hello", new rmi.HelloServant());
+        registry.rebind("patient", new PatientServant());
 
-        Patient patient = new Patient();
-        patient.setName("test");
-        patient.setAddress("test");
-
-        PatientDaoImplementation patDao = new PatientDaoImplementation();
-        patDao.add(patient);
+//        Patient patient = new Patient();
+//        patient.setName("test");
+//        patient.setAddress("test");
+//
+//        PatientDaoImplementation patDao = new PatientDaoImplementation();
+//        patDao.add(patient);
     }
 }
