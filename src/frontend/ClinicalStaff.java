@@ -94,8 +94,6 @@ public class ClinicalStaff {
 
     public static void closewin() {
         frame1.dispose();
-
-
     }
 
 

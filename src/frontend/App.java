@@ -13,10 +13,8 @@ public class App extends JFrame {
     public static String name;
     public JPanel Login;
     private JTextField username;
-    private JTextField password;
     private JButton loginButton;
     private JButton EXITButton;
-    String pass;
     public static JFrame frame = new JFrame("Login");
 
 
@@ -41,13 +39,27 @@ public class App extends JFrame {
                 }*/
 
                 name = username.getText();
-                pass = password.getText();
 
                 JOptionPane.showMessageDialog(null, "Welcome " + name);
                 String role = name;
-                if (role.equals("")) {
+                if (role.equals("cs")) {
                     closewin();
                     ClinicalStaff.window();
+                }
+                else if (role.equals("re"))
+                {
+                    closewin();
+                    Receptionist.window();
+                }
+                else if (role.equals("mr"))
+                {
+                    closewin();
+                    MedicalRecordsStaff.window();
+                }
+                else if (role.equals(""))
+                {
+                    closewin();
+                    HealthServiceManagement.window();
                 }
             }
         });
@@ -94,7 +106,7 @@ public class App extends JFrame {
      */
     private void $$$setupUI$$$() {
         Login = new JPanel();
-        Login.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
+        Login.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         Login.setEnabled(false);
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$(null, -1, 24, label1.getFont());
@@ -106,29 +118,22 @@ public class App extends JFrame {
         final JLabel label2 = new JLabel();
         Font label2Font = this.$$$getFont$$$(null, -1, 16, label2.getFont());
         if (label2Font != null) label2.setFont(label2Font);
-        label2.setText("Username");
+        label2.setText("Email");
         Login.add(label2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         username = new JTextField();
         Font usernameFont = this.$$$getFont$$$(null, -1, 16, username.getFont());
         if (usernameFont != null) username.setFont(usernameFont);
-        Login.add(username, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label3 = new JLabel();
-        Font label3Font = this.$$$getFont$$$(null, -1, 16, label3.getFont());
-        if (label3Font != null) label3.setFont(label3Font);
-        label3.setText("Password");
-        Login.add(label3, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 3, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        password = new JTextField();
-        Login.add(password, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        Login.add(username, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         loginButton = new JButton();
         Font loginButtonFont = this.$$$getFont$$$(null, -1, 20, loginButton.getFont());
         if (loginButtonFont != null) loginButton.setFont(loginButtonFont);
         loginButton.setText("Login");
-        Login.add(loginButton, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Login.add(loginButton, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         EXITButton = new JButton();
         Font EXITButtonFont = this.$$$getFont$$$(null, Font.BOLD, -1, EXITButton.getFont());
         if (EXITButtonFont != null) EXITButton.setFont(EXITButtonFont);
         EXITButton.setText("EXIT");
-        Login.add(EXITButton, new com.intellij.uiDesigner.core.GridConstraints(5, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTHWEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Login.add(EXITButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTHWEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
