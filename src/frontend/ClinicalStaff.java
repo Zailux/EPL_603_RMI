@@ -53,6 +53,10 @@ public class ClinicalStaff {
             public void actionPerformed(ActionEvent e) {
                 String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
+
+                String cid = JOptionPane.showInputDialog(frame1, "Enter consultation id:");
+                int cidgiven = Integer.parseInt(id);
+
                 JLabel label = new JLabel("");
                 JTextField field3 = new JTextField("");
 
