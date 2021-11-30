@@ -8,5 +8,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public interface UserService extends Remote {
-    public User loginUser(String username, String password) throws RemoteException, SQLException;
+    public User loginUser(String email) throws RemoteException, SQLException;
+
+    public User fetchUser(int id) throws RemoteException,SQLException;
 }

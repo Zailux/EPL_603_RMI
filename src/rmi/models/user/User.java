@@ -6,7 +6,7 @@ public class User implements Serializable {
 
     int id;
     String name;
-    String address;
+    String email;
     String role;
 
     public User () {}
@@ -14,7 +14,7 @@ public class User implements Serializable {
     public User(String name, String address, String role)
     {
         this.name = name;
-        this.address = address;
+        this.email = address;
         this.role = role;
     }
 
@@ -38,14 +38,14 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getAddress()
+    public String getEmail()
     {
-        return address;
+        return email;
     }
 
-    public void setAddress(String address)
+    public void setEmail(String address)
     {
-        this.address = address;
+        this.email = address;
     }
 
     public String getRole() { return role;};

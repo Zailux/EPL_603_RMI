@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    public User loginUser(String password, String username)
-            throws SQLException;
+    public User loginUser(String email) throws SQLException;
+
+    public User fetchUser(int id) throws SQLException;
 }

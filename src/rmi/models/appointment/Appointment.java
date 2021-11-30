@@ -11,18 +11,31 @@ import java.time.LocalDateTime;
 public class Appointment implements Serializable {
 
     int id;
+    int p_id;
+    int u_id;
     Date date;
-    Patient patient;
-    User doctor;
+    Date created;
+    boolean attended;
 
     public Appointment () {}
 
-    public Appointment(Patient patient, User doctor, Date date)
+    public Appointment(int p_id, int u_id, Date date, Date created, boolean attended)
     {
+        this.id = id;
+        this.p_id = p_id;
+        this.u_id = u_id;
         this.date = date;
-        this.patient = patient;
-        this.doctor = doctor;
+        this.created = created;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 
     public Integer getId()
     {
@@ -34,34 +47,35 @@ public class Appointment implements Serializable {
         this.id = id;
     }
 
-    public User getDoctor()
-    {
-        return doctor;
+    public int getP_id() {
+        return p_id;
     }
 
-    public void setDoctor(User doctor)
-    {
-        this.doctor = doctor;
+    public void setP_id(int p_id) {
+        this.p_id = p_id;
     }
 
-    public Patient getPatient()
-    {
-        return patient;
+    public int getU_id() {
+        return u_id;
     }
 
-    public void setPatient(Patient patient)
-    {
-        this.patient = patient;
+    public void setU_id(int u_id) {
+        this.u_id = u_id;
     }
 
-    public Date getDate()
-    {
-        return date;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setDate(Date date)
-    {
-        this.date = date;
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
+    public boolean isAttended() {
+        return attended;
+    }
+
+    public void setAttended(boolean attended) {
+        this.attended = attended;
+    }
 }

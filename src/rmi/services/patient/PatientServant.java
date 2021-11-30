@@ -35,7 +35,7 @@ public class PatientServant extends UnicastRemoteObject implements PatientServic
     }
 
     @Override
-    public Patient fetchPatient(Integer id, String name) throws RemoteException, SQLException {
+    public Patient fetchPatient(Integer id) throws RemoteException, SQLException {
         PatientDaoImplementation patDao = new PatientDaoImplementation();
         Patient patient = patDao.getPatient(id);
         return patient;
