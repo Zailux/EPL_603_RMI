@@ -10,13 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppointmentDaoImplementation implements AppointmentDao{
+public class AppointmentDaoImplementation implements AppointmentDao {
 
     static Connection con = Postgres.getConnection();
 
     @Override
     public int add(Appointment appointment) throws SQLException {
-        String query= "insert into \"Appointment\"(p_id, u_id, date, created, attended) VALUES (?, ?, ?, ?, ?)";
+        String query = "insert into \"Appointment\"(p_id, u_id, date, created, attended) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setInt(1, appointment.getP_id());
@@ -28,7 +28,7 @@ public class AppointmentDaoImplementation implements AppointmentDao{
         return n;
     }
 
-//    @Override
+    //    @Override
 //    public void delete(int id) throws SQLException {
 //        String query
 //                = "delete from appointment where id =?";
@@ -38,32 +38,31 @@ public class AppointmentDaoImplementation implements AppointmentDao{
 //        ps.executeUpdate();
 //    }
 //
-//    @Override
-//    public Appointment getAppointment(int id) throws SQLException {
-//        String query
-//                = "select * from appointment where id= ?";
-//        PreparedStatement ps
-//                = con.prepareStatement(query);
-//
-//        ps.setInt(1, id);
-//        Appointment appointment = new Appointment();
-//        ResultSet rs = ps.executeQuery();
-//        boolean check = false;
-//
-//        while (rs.next()) {
-//            check = true;
-//            appointment.setId(rs.getInt("id"));
-//            // appointment.setDoctor(rs.getObject("doctor"));
-//            appointment.setDate(rs.getDate("date"));
-//            // appointment.setPatient(rs.getObject("patient"));
-//        }
-//
-//        if (check == true) {
-//            return appointment;
-//        }
-//        else
-//            return null;
-//    }
+    @Override
+    public Appointment getAppointment(int id) throws SQLException {
+        String query = "select * from \"Appointment\" where id= ?";
+        PreparedStatement ps = con.prepareStatement(query);
+
+        ps.setInt(1, id);
+        Appointment appointment = new Appointment();
+        ResultSet rs = ps.executeQuery();
+        boolean check = false;
+
+        while (rs.next()) {
+            check = true;
+            appointment.setId(rs.getInt("id"));
+            appointment.setP_id(rs.getInt("p_id"));
+            appointment.setU_id(rs.getInt("u_id"));
+            appointment.setDate(rs.getDate("date"));
+            appointment.setCreated(rs.getDate("created"));
+            appointment.setAttended(rs.getBoolean("attended"));
+        }
+
+        if (check == true) {
+            return appointment;
+        } else
+            return null;
+    }
 //
 //    @Override
 //    public List<Appointment> getAppointments() throws SQLException {
@@ -85,14 +84,16 @@ public class AppointmentDaoImplementation implements AppointmentDao{
 //    }
 //
 //    @Override
-//    public void update(Appointment appointment) throws SQLException {
-//
-//        String query
-//                = "update appointment set date=? where id = ?";
-//        PreparedStatement ps
-//                = con.prepareStatement(query);
-//        ps.setInt(1, appointment.getId());
-//        ps.setDate(2, appointment.getDate());
-//        ps.executeUpdate();
-//    }
+    public void update(Appointment appointment) throws SQLException {
+
+        String query = "update \"Appointment\" set p_id=?, u_id=?, date=?, created=?, attended=? where id = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, appointment.getP_id());
+        ps.setInt(2, appointment.getU_id());
+        ps.setDate(3, appointment.getDate());
+        ps.setDate(4, appointment.getCreated());
+        ps.setBoolean(5, appointment.isAttended());
+        ps.setInt(6, appointment.getId());
+        ps.executeUpdate();
+    }
 }

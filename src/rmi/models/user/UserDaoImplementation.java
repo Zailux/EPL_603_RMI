@@ -1,6 +1,7 @@
 package rmi.models.user;
 
 import rmi.database.Postgres;
+import rmi.models.treatment.Treatment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,17 +17,13 @@ public class UserDaoImplementation implements UserDao {
 
 
     @Override
-    public User loginUser(String password, String username)
-            throws SQLException
-    {
+    public User loginUser(String email)
+            throws SQLException {
 
-        String query
-                = "select * from user where password=? and username =?";
-        PreparedStatement ps
-                = con.prepareStatement(query);
+        String query = "select * from user where email =?";
+        PreparedStatement ps = con.prepareStatement(query);
 
-        ps.setString(1, password);
-        ps.setString(2,username);
+        ps.setString(1, email);
         User user = new User();
         ResultSet rs = ps.executeQuery();
         boolean check = false;
@@ -35,14 +32,38 @@ public class UserDaoImplementation implements UserDao {
             check = true;
             user.setId(rs.getInt("id"));
             user.setName(rs.getString("name"));
-            user.setAddress(rs.getString("address"));
+            user.setEmail(rs.getString("email"));
             user.setRole(rs.getString("role"));
         }
 
         if (check == true) {
             return user;
-        }
-        else
+        } else
             return null;
     }
+
+    @Override
+    public User fetchUse(int id) throws SQLException {
+        String query = "select * from \"User\" where id= ?";
+        PreparedStatement ps = con.prepareStatement(query);
+
+        ps.setInt(1, id);
+        User user = new User();
+        ResultSet rs = ps.executeQuery();
+        boolean check = false;
+
+        while (rs.next()) {
+            check = true;
+            user.setId(rs.getInt("id"));
+            user.setName(rs.getString("name"));
+            user.setEmail(rs.getString("email"));
+            user.setRole(rs.getString("role"));
+        }
+
+        if (check == true) {
+            return user;
+        } else
+            return null;
+    }
+
 }

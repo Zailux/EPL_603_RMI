@@ -15,18 +15,10 @@ public  class ApplicationServer {
     public static void main(String[] args) throws RemoteException, SQLException {
 
         Registry registry = LocateRegistry.createRegistry(5099);
-        // registry.rebind("hello", new rmi.HelloServant());
         registry.rebind("patient", new PatientServant());
         registry.rebind("user", new UserServant());
         registry.rebind("consultation", new ConsultationServant());
         registry.rebind("treatment", new TreatmentServant());
         registry.rebind("medicine", new MedicineServant());
-
-//        Patient patient = new Patient();
-//        patient.setName("test");
-//        patient.setAddress("test");
-//
-//        PatientDaoImplementation patDao = new PatientDaoImplementation();
-//        patDao.add(patient);
     }
 }

@@ -1,5 +1,7 @@
 package rmi.services.user;
 
+import rmi.models.treatment.Treatment;
+import rmi.models.treatment.TreatmentDaoImplementation;
 import rmi.models.user.User;
 import rmi.models.user.UserDaoImplementation;
 
@@ -14,9 +16,16 @@ public class UserServant extends UnicastRemoteObject implements UserService {
     }
 
     @Override
-    public User loginUser(String username, String password) throws RemoteException, SQLException {
+    public User loginUser(String email) throws RemoteException, SQLException {
         UserDaoImplementation userDao = new UserDaoImplementation();
-        User user = userDao.loginUser(username, password);
+        User user = userDao.loginUser(email);
+        return user;
+    }
+
+    @Override
+    public User fetchUser(int id) throws RemoteException, SQLException {
+        UserDaoImplementation userDao = new UserDaoImplementation();
+        User user = userDao.fetchUser(id);
         return user;
     }
 }

@@ -37,12 +37,12 @@ public class AppointmentServant extends UnicastRemoteObject implements Appointme
 //        return appointment;
 //    }
 //
-//    @Override
-//    public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException {
-//        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
-//        Appointment appointment = appDao.getAppointment(id);
-//        return appointment;
-//    }
+    @Override
+    public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException {
+        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
+        Appointment appointment = appDao.getAppointment(id);
+        return appointment;
+    }
 //
 //    @Override
 //    public List<Appointment> fetchAppointments() throws RemoteException, SQLException {

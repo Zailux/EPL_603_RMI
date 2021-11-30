@@ -11,10 +11,10 @@ public interface AppointmentDao {
             throws SQLException;
 //    public void delete(int id)
 //            throws SQLException;
-//    public Appointment getAppointment(int id)
-//            throws SQLException;
+    public Appointment getAppointment(int id)
+            throws SQLException;
 //    public List<Appointment> getAppointments()
 //            throws SQLException;
-//    public void update(Appointment appointment)
-//            throws SQLException;
+    public void update(Appointment appointment)
+            throws SQLException;
 }
