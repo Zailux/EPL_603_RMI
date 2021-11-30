@@ -1,7 +1,6 @@
-package rmi.database.models;
+package rmi.models.patient;
 
 import rmi.database.Postgres;
-import rmi.database.models.PatientDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,13 +19,15 @@ public class PatientDaoImplementation implements PatientDao {
             throws SQLException
     {
 
-        String query
-                = "insert into patient(name, "
-                + "address) VALUES (?, ?)";
+        String query= "insert into \"Patient\" (name, historyOfSelfHarm, riskIndicator, email, alive, c_id) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, patient.getName());
-        ps.setString(2, patient.getAddress());
+        ps.setBoolean(2, patient.getHistoryOfSelfHarm());
+        ps.setString(3, patient.getRiskIndicator());
+        ps.setString(4, patient.getEmail());
+        ps.setBoolean(5, patient.isAlive());
+        ps.setInt(6, patient.getC_id());
         int n = ps.executeUpdate();
         return n;
     }
@@ -36,7 +37,7 @@ public class PatientDaoImplementation implements PatientDao {
             throws SQLException
     {
         String query
-                = "delete from patient where id =?";
+                = "delete from \"Patient\" where id =?";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setInt(1, id);
@@ -50,7 +51,7 @@ public class PatientDaoImplementation implements PatientDao {
     {
 
         String query
-                = "select * from patient where id= ?";
+                = "select * from \"Patient\" where id= ?";
         PreparedStatement ps
                 = con.prepareStatement(query);
 
@@ -63,9 +64,11 @@ public class PatientDaoImplementation implements PatientDao {
             check = true;
             patient.setId(rs.getInt("id"));
             patient.setName(rs.getString("name"));
-            patient.setAddress(rs.getString("address"));
             patient.setHistoryOfSelfHarm(rs.getBoolean("historyOfSelfHarm"));
             patient.setRiskIndicator(rs.getString("riskIndicator"));
+            patient.setEmail(rs.getString("email"));
+            patient.setAlive(rs.getBoolean("alive"));
+            patient.setC_id(rs.getInt("c_id"));
         }
 
         if (check == true) {
@@ -79,7 +82,7 @@ public class PatientDaoImplementation implements PatientDao {
     public List<Patient> getPatients()
             throws SQLException
     {
-        String query = "select * from patient";
+        String query = "select * from \"Patient\"";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -89,9 +92,11 @@ public class PatientDaoImplementation implements PatientDao {
             Patient patient = new Patient();
             patient.setId(rs.getInt("id"));
             patient.setName(rs.getString("name"));
-            patient.setAddress(rs.getString("address"));
             patient.setHistoryOfSelfHarm(rs.getBoolean("historyOfSelfHarm"));
             patient.setRiskIndicator(rs.getString("riskIndicator"));
+            patient.setEmail(rs.getString("email"));
+            patient.setAlive(rs.getBoolean("alive"));
+            patient.setC_id(rs.getInt("c_id"));
             ls.add(patient);
         }
         return ls;
@@ -103,15 +108,17 @@ public class PatientDaoImplementation implements PatientDao {
     {
 
         String query
-                = "update patient set name=?, "
-                + " address=?,historyOfSelfHarm=?,riskIndicator=? where id = ?";
+                = "update \"patient\" set name=?, historyOfSelfHarm=?, riskIndicator=?, email=?, alive=?, c_id=? where id = ?";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, patient.getName());
-        ps.setString(2, patient.getAddress());
-        ps.setInt(3, patient.getId());
         ps.setBoolean(2, patient.getHistoryOfSelfHarm());
         ps.setString(3, patient.getRiskIndicator());
+        ps.setString(4, patient.getEmail());
+        ps.setBoolean(5, patient.isAlive());
+        ps.setInt(6, patient.getC_id());
+        ps.setInt(7, patient.getId());
+
         ps.executeUpdate();
     }
 }
