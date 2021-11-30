@@ -37,7 +37,7 @@ public class ConsultationServant extends UnicastRemoteObject implements Consulta
         Consultation consultation = new Consultation();
         consultation.setDate(date);
 
-        AppointmentDaoImplementation consDao = new AppointmentDaoImplementation();
+        ConsultationDaoImplementation consDao = new ConsultationDaoImplementation();
         consDao.update(consultation);
         return consultation;
     }
