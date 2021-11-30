@@ -57,4 +57,20 @@ public class ConsultationDaoImplementation implements ConsultationDao {
             return null;
 
     }
+
+    @Override
+    public void update(Consultation consultation) throws SQLException {
+        String query = "update \"Consultation\" set t_id=?, p_id=?, pc_id=?, u_id=?, type=?, date=?, finished=? where id = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, consultation.getT_id());
+        ps.setInt(2, consultation.getP_id());
+        ps.setInt(3, consultation.getPc_id());
+        ps.setInt(4, consultation.getU_id());
+        ps.setString(5, consultation.getType());
+        ps.setDate(6, consultation.getDate());
+        ps.setBoolean(7, consultation.isFinished());
+
+        ps.setInt(8, consultation.getId());
+        ps.executeUpdate();
+    }
 }

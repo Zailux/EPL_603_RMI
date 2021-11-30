@@ -17,6 +17,6 @@ public interface ConsultationDao {
             throws SQLException;
 //    public List<Appointment> getAppointments()
 //            throws SQLException;
-//    public void update(Appointment appointment)
-//            throws SQLException;
+    public void update(Consultation consultation)
+            throws SQLException;
 }
