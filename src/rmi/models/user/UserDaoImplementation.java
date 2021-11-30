@@ -43,7 +43,7 @@ public class UserDaoImplementation implements UserDao {
     }
 
     @Override
-    public User fetchUse(int id) throws SQLException {
+    public User fetchUser(int id) throws SQLException {
         String query = "select * from \"User\" where id= ?";
         PreparedStatement ps = con.prepareStatement(query);
 
