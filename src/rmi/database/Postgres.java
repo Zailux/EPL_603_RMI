@@ -13,9 +13,9 @@ public class Postgres {
             System.out.println(e.getMessage());
         }
 
-        String url =
-        String username =
-        String password = 
+        String url = "jdbc:postgresql://surus.db.elephantsql.com:5432/otopyalz";
+        String username = "otopyalz";
+        String password = "Q5efw30ucCO4E-3KI4IaRh3ohldQ27d9";
 
         try {
             db = DriverManager.getConnection(url, username, password);
