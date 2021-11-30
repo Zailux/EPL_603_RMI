@@ -1,5 +1,6 @@
 package rmi;
 
+import rmi.services.appointment.AppointmentServant;
 import rmi.services.consultation.ConsultationServant;
 import rmi.services.medicine.MedicineServant;
 import rmi.services.patient.PatientServant;
@@ -20,5 +21,6 @@ public  class ApplicationServer {
         registry.rebind("consultation", new ConsultationServant());
         registry.rebind("treatment", new TreatmentServant());
         registry.rebind("medicine", new MedicineServant());
+        registry.rebind("appointment", new AppointmentServant());
     }
 }

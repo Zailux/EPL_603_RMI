@@ -1,11 +1,24 @@
 package frontend;
 
+import rmi.services.appointment.AppointmentService;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class Receptionist {
@@ -63,6 +76,17 @@ public class Receptionist {
                 String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
 
+                AppointmentService service = null;
+                try {
+                    service = (AppointmentService) Naming.lookup("rmi://localhost:5099/appointment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
                 JLabel label = new JLabel("");
                 JTextField field1 = new JTextField("");
                 JTextField field3 = new JTextField("");
@@ -83,10 +107,18 @@ public class Receptionist {
                 Component com = panel1.add(field3);
                 String comment = com.toString();
 
+
                 int result = JOptionPane.showConfirmDialog(null, panel1, "Schedule Appointment",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
+                    try {
+                        service.createAppointment(1, 1, new Date(Calendar.getInstance().getTime().getTime()), new Date(Calendar.getInstance().getTime().getTime()), false);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    } catch (RemoteException remoteException) {
+                        remoteException.printStackTrace();
+                    }
                     JOptionPane.showMessageDialog(null, "Appointment for patient " + id + " scheduled");
                     System.out.println(" " + field1.getText()
                             + " " + field2.getText() + " " + field3.getText());

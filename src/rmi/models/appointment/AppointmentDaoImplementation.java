@@ -16,7 +16,7 @@ public class AppointmentDaoImplementation implements AppointmentDao {
 
     @Override
     public int add(Appointment appointment) throws SQLException {
-        String query = "insert into \"Appointment\"(p_id, u_id, date, created, attended) VALUES (?, ?, ?, ?, ?)";
+        String query = "insert into \"Appointment\" (p_id, u_id, date, created, attended) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setInt(1, appointment.getP_id());
