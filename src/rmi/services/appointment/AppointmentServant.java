@@ -19,35 +19,35 @@ public class AppointmentServant extends UnicastRemoteObject implements Appointme
     }
 
     @Override
-    public Appointment createAppointment(Date date, User doctor, Patient patient) throws RemoteException, SQLException {
-        Appointment appointment = new Appointment(patient, doctor, date);
+    public Appointment createAppointment(int p_id, int u_id, Date date, Date created, boolean attended) throws RemoteException, SQLException {
+        Appointment appointment = new Appointment(p_id, u_id, date, created, attended);
 
         AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
         appDao.add(appointment);
         return appointment;
     }
 
-    @Override
-    public Appointment updateAppointment(Date date) throws RemoteException, SQLException {
-        Appointment appointment = new Appointment();
-        appointment.setDate(date);
-
-        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
-        appDao.update(appointment);
-        return appointment;
-    }
-
-    @Override
-    public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException {
-        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
-        Appointment appointment = appDao.getAppointment(id);
-        return appointment;
-    }
-
-    @Override
-    public List<Appointment> fetchAppointments() throws RemoteException, SQLException {
-        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
-        List<Appointment> appointments = appDao.getAppointments();
-        return appointments;
-    }
+//    @Override
+//    public Appointment updateAppointment(Date date) throws RemoteException, SQLException {
+//        Appointment appointment = new Appointment();
+//        appointment.setDate(date);
+//
+//        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
+//        appDao.update(appointment);
+//        return appointment;
+//    }
+//
+//    @Override
+//    public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException {
+//        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
+//        Appointment appointment = appDao.getAppointment(id);
+//        return appointment;
+//    }
+//
+//    @Override
+//    public List<Appointment> fetchAppointments() throws RemoteException, SQLException {
+//        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
+//        List<Appointment> appointments = appDao.getAppointments();
+//        return appointments;
+//    }
 }
