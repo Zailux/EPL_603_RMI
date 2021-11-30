@@ -6,16 +6,19 @@ public class Patient implements Serializable {
 
     int id;
     String name;
-    String address;
+    String email;
     Boolean historyOfSelfHarm;
     String riskIndicator;
+    boolean alive;
+    int c_id;
+
 
     public Patient () {}
 
-    public Patient(String name, String address, Boolean historyOfSelfHarm, String riskIndicator)
+    public Patient(String name, String email, Boolean historyOfSelfHarm, String riskIndicator)
     {
         this.name = name;
-        this.address = address;
+        this.email = email;
         this.historyOfSelfHarm = historyOfSelfHarm;
         this.riskIndicator = riskIndicator;
     }
@@ -40,14 +43,30 @@ public class Patient implements Serializable {
         this.name = name;
     }
 
-    public String getAddress()
-    {
-        return address;
+    public boolean isAlive() {
+        return alive;
     }
 
-    public void setAddress(String address)
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public int getC_id() {
+        return c_id;
+    }
+
+    public void setC_id(int c_id) {
+        this.c_id = c_id;
+    }
+
+    public String getEmail()
     {
-        this.address = address;
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     public Boolean getHistoryOfSelfHarm()
