@@ -20,7 +20,7 @@ public class UserDaoImplementation implements UserDao {
     public User loginUser(String email)
             throws SQLException {
 
-        String query = "select * from user where email =?";
+        String query = "select * from \"User\" where email=?";
         PreparedStatement ps = con.prepareStatement(query);
 
         ps.setString(1, email);

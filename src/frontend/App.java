@@ -1,11 +1,19 @@
 package frontend;
 
+import rmi.models.user.User;
+import rmi.services.user.UserService;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.Locale;
 
 
@@ -22,9 +30,11 @@ public class App extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*rmi.HelloService service = null;
+                name = username.getText();
+                UserService service = null;
+                User user = null;
                 try {
-                    service = (rmi.HelloService) Naming.lookup("rmi://localhost:5099/hello");
+                    service = (UserService) Naming.lookup("rmi://localhost:5099/user");
                 } catch (NotBoundException ex) {
                     ex.printStackTrace();
                 } catch (MalformedURLException ex) {
@@ -33,25 +43,24 @@ public class App extends JFrame {
                     ex.printStackTrace();
                 }
                 try {
-                    JOptionPane.showMessageDialog(null, service.echo("Hey server"));
+                    user = service.loginUser(name);
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
-                }*/
-
-                name = username.getText();
-
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 JOptionPane.showMessageDialog(null, "Welcome " + name);
-                String role = name;
-                if (role.equals("cs")) {
+                String role = user.getRole();
+                if (role.equals("doctor") || role.equals("nurse")) {
                     closewin();
                     ClinicalStaff.window();
                 }
-                else if (role.equals("re"))
+                else if (role.equals("receptionist"))
                 {
                     closewin();
                     Receptionist.window();
                 }
-                else if (role.equals("mr"))
+                else if (role.equals("medicalRecordsStaff"))
                 {
                     closewin();
                     MedicalRecordsStaff.window();
