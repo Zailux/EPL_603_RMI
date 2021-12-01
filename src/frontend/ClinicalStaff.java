@@ -2,10 +2,12 @@ package frontend;
 
 import rmi.models.appointment.Appointment;
 import rmi.models.consultation.Consultation;
+import rmi.models.medicine.Medicine;
 import rmi.models.record.Record;
 import rmi.models.treatment.Treatment;
 import rmi.models.user.User;
 import rmi.services.consultation.ConsultationService;
+import rmi.services.medicine.MedicineService;
 import rmi.services.record.RecordService;
 import rmi.services.treatment.TreatmentService;
 import rmi.services.user.UserService;
@@ -421,12 +423,29 @@ public class ClinicalStaff {
                                                               public void actionPerformed(ActionEvent e) {
 
                                                                   int id = 1;
-                                                                  String value = "";
+                                                                  String value = "test";
                                                                   String ids = JOptionPane.showInputDialog(frame1, "Enter medicine id:");
                                                                   int idgiven = Integer.parseInt(ids);
 
-
-                                                                  result.setText(value);
+                                                                  MedicineService service = null;
+                                                                  try {
+                                                                      service = (MedicineService) Naming.lookup("rmi://localhost:5099/medicine");
+                                                                  } catch (NotBoundException ex) {
+                                                                      ex.printStackTrace();
+                                                                  } catch (MalformedURLException ex) {
+                                                                      ex.printStackTrace();
+                                                                  } catch (RemoteException ex) {
+                                                                      ex.printStackTrace();
+                                                                  }
+                                                                  Medicine medicine = null;
+                                                                  try {
+                                                                      medicine = service.fetchMedicine(idgiven);
+                                                                  } catch (RemoteException ex) {
+                                                                      ex.printStackTrace();
+                                                                  } catch (SQLException ex) {
+                                                                      ex.printStackTrace();
+                                                                  }
+                                                                  result.setText("Description: " + medicine.getDescription());
 
                                                               }
                                                           });
