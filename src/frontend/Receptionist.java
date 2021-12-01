@@ -11,6 +11,7 @@ import rmi.services.treatment.TreatmentService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.table.TableModel;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,8 +26,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.*;
+import java.util.List;
 
 public class Receptionist {
     private JButton EXITButton;
@@ -47,9 +48,6 @@ public class Receptionist {
                 System.exit(0);
             }
         });
-        String myArray[] = new String[2];
-        myArray[0] = "Kostis";
-        myArray[1] = "En kalos";
 
         patientSearchButton.addActionListener(new ActionListener() {
             @Override
@@ -303,10 +301,6 @@ public class Receptionist {
             }
         });
 
-
-
-
-
         showAppointmentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -324,21 +318,41 @@ public class Receptionist {
                     ex.printStackTrace();
                 }
 
-                String id = JOptionPane.showInputDialog(frame2, "Enter appointment id:");
+                String id = JOptionPane.showInputDialog(frame2, "Enter doctor id:");
                 int idgiven = Integer.parseInt(id);
+                //List arr =[];
+                List<Appointment> arr = new ArrayList<Appointment>();
 
                 try {
-                    appointment = service.fetchAppointment(idgiven);
+                    arr = service.fetchDoctorAppointments(idgiven);
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
 
-                String value = "Appointment ID: " + appointment.getId().toString() + " Patient ID: " + appointment.getP_id() + " Doctor ID: " + appointment.getU_id();
+                String value = "";
+                Appointment ap;
+                Vector res = new Vector();
+                String temp = "";
+                DefaultListModel<String> l1 = new DefaultListModel<>();
+                l1.addElement("Appointments for doctor " + id);
+                l1.addElement("\n\n\n");
 
-
-                result.setText(value);
+                for (int i = 0; i < arr.size(); i++) {
+                    ap = arr.get(i);
+                    temp = "Appointment ID:  " + ap.getId().toString() + "    Patient ID:  " + ap.getP_id() + "    Appointment Date:  " + ap.getDate();
+                    l1.addElement(temp);
+                }
+                JFrame f;
+                f = new JFrame();
+                JList<String> list = new JList<>(l1);
+                list.setBounds(0, 0, 750, 750);
+                f.add(list);
+                list.setFont(new Font(null, Font.BOLD, 16));
+                f.setSize(750, 750);
+                f.setLayout(null);
+                f.setVisible(true);
 
             }
         });
@@ -346,10 +360,38 @@ public class Receptionist {
         repeaterPrescriptionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
-                int idgiven = Integer.parseInt(id);
 
-                JOptionPane.showMessageDialog(null, "Prescriptions patient " + id + " created");
+                JLabel label = new JLabel("");
+                JTextField field1 = new JTextField("");
+                JTextField field2 = new JTextField("");
+
+                JPanel panel2 = new JPanel(new GridLayout(10, 10));
+                panel2.add(new JLabel("Prescriptions repeat"));
+
+                panel2.add(new JLabel("Patient id:: "));
+                panel2.add(field1);
+
+                panel2.add(new JLabel("Doctor id: "));
+                panel2.add(field2);
+
+                int result = JOptionPane.showConfirmDialog(null, panel2, "Prescription Created",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    int patientid = Integer.parseInt(field1.getText());
+                    int doctorid = Integer.parseInt(field2.getText());
+
+
+
+
+                    
+
+
+                    JOptionPane.showMessageDialog(null, "Prescription for patient " + patientid + " created from doctor " + doctorid);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Prescription not created");
+                }
+
 
             }
         });
