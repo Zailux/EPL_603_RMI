@@ -21,6 +21,7 @@ public class TreatmentServant extends UnicastRemoteObject implements TreatmentSe
     public Treatment createTreatment(int u_id, int m_id, Date date, String description, String previousT, int quantity) throws RemoteException, SQLException {
         PreparedStatement ps;
         Treatment treatment;
+
         if (previousT.equals("null")) {
             String query= "insert into \"Treatment\"(u_id, m_id, date, description, previousT, quantity) VALUES (?, ?, ?, ?, NULL, ?)";
             ps = con.prepareStatement(query);

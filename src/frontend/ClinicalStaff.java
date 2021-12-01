@@ -247,10 +247,11 @@ public class ClinicalStaff {
 
                 String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
-
+                String previousT = "null";
                 Treatment lastTreatment = null;
                 try {
                     lastTreatment = service.fetchPatientLatestTreatment(idgiven);
+                    previousT = String.valueOf(lastTreatment.getId());
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 } catch (SQLException ex) {
@@ -307,7 +308,7 @@ public class ClinicalStaff {
                         }
                         java.sql.Date sql = new java.sql.Date(parsed.getTime());
                         assert service != null;
-                        treatment = service.createTreatment(idgiven, med, sql, description, "null", coun);
+                        treatment = service.createTreatment(idgiven, med, sql, description, previousT, coun);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     } catch (RemoteException remoteException) {
