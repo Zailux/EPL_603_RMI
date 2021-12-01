@@ -1,5 +1,6 @@
 package frontend;
 
+import rmi.models.appointment.Appointment;
 import rmi.models.consultation.Consultation;
 import rmi.models.patient.Patient;
 import rmi.models.treatment.Treatment;
@@ -163,8 +164,6 @@ public class Receptionist {
             }
         });
 
-
-
         scheduleAppointmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -192,11 +191,9 @@ public class Receptionist {
 
                 panel1.add(new JLabel("Appointment date: "));
                 Component nc = panel1.add(field1);
-                String appointmentdate = nc.toString();
 
                 panel1.add(new JLabel("Doctor id: "));
                 Component di = panel1.add(field2);
-                String doctorid = di.toString();
 
                 panel1.add(new JLabel("Comment: "));
                 Component com = panel1.add(field3);
@@ -207,8 +204,24 @@ public class Receptionist {
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
+                    int doctorID = Integer.parseInt(field2.getText());
+                    String dategiven = field1.getText();
+
+                    long millis = System.currentTimeMillis();
+                    Date date = new Date(millis);
+                    System.out.println(date);
+
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
+                    java.util.Date date1 = null;
                     try {
-                        service.createAppointment(1, 1, new Date(Calendar.getInstance().getTime().getTime()), new Date(Calendar.getInstance().getTime().getTime()), false);
+                        date1 = sdf1.parse(dategiven);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                    Date sqlStartDate = new Date(date1.getTime());
+
+                    try {
+                        service.createAppointment(idgiven, doctorID, sqlStartDate, date, true);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     } catch (RemoteException remoteException) {
@@ -229,18 +242,104 @@ public class Receptionist {
                 int patientid = 1;
                 int apointid = 2;
 
-                String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
-                int idgiven = Integer.parseInt(id);
+                AppointmentService service = null;
+                Appointment appointment = null;
 
-                String appoin = JOptionPane.showInputDialog(frame2, "Enter treatment id:");
-                int appointmentgiven = Integer.parseInt(appoin);
+                try {
+                    service = (AppointmentService) Naming.lookup("rmi://localhost:5099/appointment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
 
-                if ((idgiven == patientid) & (appointmentgiven == apointid)) {
-                    JOptionPane.showMessageDialog(null, "Appointment " + appointmentgiven + " of patient " + idgiven + " cancel");
+
+                AppointmentService service1 = null;
+                Appointment appointment1 = null;
+
+                try {
+                    service1 = (AppointmentService) Naming.lookup("rmi://localhost:5099/appointment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                String id = JOptionPane.showInputDialog(frame2, "Enter appointment id:");
+                int appointmentgiven = Integer.parseInt(id);
+
+                try {
+                    appointment = service.fetchAppointment(appointmentgiven);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                int pid = appointment.getP_id();
+                int uid = appointment.getU_id();
+                Date date = appointment.getDate();
+                Date created = appointment.getCreated();
+
+
+                try {
+                    appointment = service.updateAppointment(appointmentgiven, pid, uid, appointment.getDate(), appointment.getCreated(), false);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                if ((appointmentgiven == appointment.getId())) {
+                    JOptionPane.showMessageDialog(null, "Appointment " + appointmentgiven + " of patient " + appointmentgiven + " cancel");
                 } else {
                     JOptionPane.showMessageDialog(null, "Appointment or patient not found ");
 
                 }
+            }
+        });
+
+
+
+
+
+        showAppointmentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                AppointmentService service = null;
+                Appointment appointment = null;
+
+                try {
+                    service = (AppointmentService) Naming.lookup("rmi://localhost:5099/appointment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                String id = JOptionPane.showInputDialog(frame2, "Enter appointment id:");
+                int idgiven = Integer.parseInt(id);
+
+                try {
+                    appointment = service.fetchAppointment(idgiven);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                String value = "Appointment ID: " + appointment.getId().toString() + " Patient ID: " + appointment.getP_id() + " Doctor ID: " + appointment.getU_id();
+
+
+                result.setText(value);
+
             }
         });
 
@@ -251,22 +350,6 @@ public class Receptionist {
                 int idgiven = Integer.parseInt(id);
 
                 JOptionPane.showMessageDialog(null, "Prescriptions patient " + id + " created");
-
-            }
-        });
-
-        showAppointmentsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String appointment[] = new String[2];
-                appointment[0] = "2021/12/2";
-                appointment[1] = "2021/11/30";
-                String value = "";
-
-                for (int j = 0; j < appointment.length; j++) {
-                    value += (j + 1) + "." + appointment[j] + "      ";
-                }
-                result.setText(value);
 
             }
         });

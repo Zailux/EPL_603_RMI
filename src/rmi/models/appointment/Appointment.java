@@ -26,6 +26,7 @@ public class Appointment implements Serializable {
         this.u_id = u_id;
         this.date = date;
         this.created = created;
+        this.attended=attended;
     }
 
     public Date getDate() {

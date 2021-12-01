@@ -13,7 +13,9 @@ import java.util.List;
 public interface AppointmentService extends Remote {
     public Appointment createAppointment(int p_id, int u_id, Date date, Date created, boolean attended) throws RemoteException, SQLException;
 
-//    public Appointment updateAppointment(Date date) throws RemoteException, SQLException;
+    Appointment updateAppointment(int a_id, int p_id, int u_id, Date date, Date created, boolean attended) throws RemoteException, SQLException;
+
+    //    public Appointment updateAppointment(Date date) throws RemoteException, SQLException;
 //
     public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException;
 //

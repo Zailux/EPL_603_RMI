@@ -21,21 +21,20 @@ public class AppointmentServant extends UnicastRemoteObject implements Appointme
     @Override
     public Appointment createAppointment(int p_id, int u_id, Date date, Date created, boolean attended) throws RemoteException, SQLException {
         Appointment appointment = new Appointment(p_id, u_id, date, created, attended);
-
         AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
         appDao.add(appointment);
         return appointment;
     }
 
-//    @Override
-//    public Appointment updateAppointment(Date date) throws RemoteException, SQLException {
-//        Appointment appointment = new Appointment();
-//        appointment.setDate(date);
-//
-//        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
-//        appDao.update(appointment);
-//        return appointment;
-//    }
+    @Override
+    public Appointment updateAppointment(int a_id,int p_id, int u_id, Date date, Date created, boolean attended) throws RemoteException, SQLException {
+        Appointment appointment = new Appointment(p_id, u_id, date, created, attended);
+        appointment.setId(a_id);
+
+        AppointmentDaoImplementation appDao = new AppointmentDaoImplementation();
+        appDao.update(appointment);
+        return appointment;
+    }
 //
     @Override
     public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException {
