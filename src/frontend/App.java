@@ -61,7 +61,7 @@ public class App extends JFrame {
                     closewin();
                     Receptionist.window();
                 }
-                else if (role.equals("medicalRecordsStaff"))
+                else if (role.equals("medicalRecordStaff"))
                 {
                     closewin();
                     MedicalRecordsStaff.window();
