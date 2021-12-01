@@ -1,9 +1,11 @@
 package frontend;
 
 import rmi.models.consultation.Consultation;
+import rmi.models.record.Record;
 import rmi.models.treatment.Treatment;
 import rmi.models.user.User;
 import rmi.services.consultation.ConsultationService;
+import rmi.services.record.RecordService;
 import rmi.services.treatment.TreatmentService;
 import rmi.services.user.UserService;
 
@@ -18,11 +20,13 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static frontend.App.name;
@@ -40,9 +44,6 @@ public class ClinicalStaff {
 
 
     public ClinicalStaff() {
-        String myArray[] = new String[2];
-        myArray[0] = "Kostis";
-        myArray[1] = "En kalos";
 
         viewPatientRecordsButton.addActionListener(new ActionListener() {
             @Override
@@ -53,13 +54,26 @@ public class ClinicalStaff {
                 //Object id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 String ids = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(ids);
-                if (idgiven == id) {
-                    for (int j = 0; j < myArray.length; j++) {
-                        value += myArray[j] + "  ";
-                    }
-                    result.setText(value);
-                }
 
+                RecordService service = null;
+                List<Record> records = null;
+                try {
+                    service = (RecordService) Naming.lookup("rmi://localhost:5099/record");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    records = service.fetchPatientRecords(idgiven);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                System.out.println(records);
             }
         });
 
@@ -310,12 +324,9 @@ public class ClinicalStaff {
                 String ids = JOptionPane.showInputDialog(frame1, "Enter medicine id:");
                 int idgiven = Integer.parseInt(ids);
 
-                if (idgiven == id) {
-                    for (int j = 0; j < myArray.length; j++) {
-                        value += myArray[j] + "    ";
-                    }
+
                     result.setText(value);
-                }
+
             }
         });
     }

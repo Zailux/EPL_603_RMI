@@ -2,6 +2,7 @@ package rmi.services.patient;
 
 import rmi.models.patient.Patient;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
