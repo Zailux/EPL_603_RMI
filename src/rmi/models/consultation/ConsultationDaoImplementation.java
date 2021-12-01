@@ -15,16 +15,15 @@ public class ConsultationDaoImplementation implements ConsultationDao {
 
     @Override
     public int add(Consultation consultation) throws SQLException {
-        String query = "insert into \"Consultation\"(t_id, p_id, pc_id, u_id, type, date, finished) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into \"Consultation\"(t_id, p_id, u_id, type, date, finished) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setInt(1, consultation.getT_id());
         ps.setInt(2, consultation.getP_id());
-        ps.setInt(3, consultation.getPc_id());
-        ps.setInt(4, consultation.getU_id());
-        ps.setString(5, consultation.getType());
-        ps.setDate(6, consultation.getDate());
-        ps.setBoolean(7, consultation.isFinished());
+        ps.setInt(3, consultation.getU_id());
+        ps.setString(4, consultation.getType());
+        ps.setDate(5, consultation.getDate());
+        ps.setBoolean(6, consultation.isFinished());
         int n = ps.executeUpdate();
         return n;
     }
@@ -44,7 +43,6 @@ public class ConsultationDaoImplementation implements ConsultationDao {
             consultation.setId(rs.getInt("id"));
             consultation.setT_id(rs.getInt("t_id"));
             consultation.setP_id(rs.getInt("p_id"));
-            consultation.setPc_id(rs.getInt("pc_id"));
             consultation.setU_id(rs.getInt("u_id"));
             consultation.setType(rs.getString("type"));
             consultation.setDate(rs.getDate("date"));
@@ -73,7 +71,6 @@ public class ConsultationDaoImplementation implements ConsultationDao {
             consultation.setId(rs.getInt("id"));
             consultation.setT_id(rs.getInt("t_id"));
             consultation.setP_id(rs.getInt("p_id"));
-            consultation.setPc_id(rs.getInt("pc_id"));
             consultation.setU_id(rs.getInt("u_id"));
             consultation.setType(rs.getString("type"));
             consultation.setDate(rs.getDate("date"));
@@ -88,17 +85,16 @@ public class ConsultationDaoImplementation implements ConsultationDao {
 
     @Override
     public void update(Consultation consultation) throws SQLException {
-        String query = "update \"Consultation\" set t_id=?, p_id=?, pc_id=?, u_id=?, type=?, date=?, finished=? where id = ?";
+        String query = "update \"Consultation\" set t_id=?, p_id=?, u_id=?, type=?, date=?, finished=? where id = ?";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, consultation.getT_id());
         ps.setInt(2, consultation.getP_id());
-        ps.setInt(3, consultation.getPc_id());
-        ps.setInt(4, consultation.getU_id());
-        ps.setString(5, consultation.getType());
-        ps.setDate(6, consultation.getDate());
-        ps.setBoolean(7, consultation.isFinished());
+        ps.setInt(3, consultation.getU_id());
+        ps.setString(4, consultation.getType());
+        ps.setDate(5, consultation.getDate());
+        ps.setBoolean(6, consultation.isFinished());
 
-        ps.setInt(8, consultation.getId());
+        ps.setInt(7, consultation.getId());
         ps.executeUpdate();
     }
 }
