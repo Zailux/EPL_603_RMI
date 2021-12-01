@@ -21,6 +21,7 @@ public class TreatmentDaoImplementation implements TreatmentDao{
         ps.setDate(3, treatment.getDate());;
         ps.setString(4, treatment.getDescription());
         ps.setInt(5, treatment.getPreviousT());
+        ps.setInt(6, treatment.getQuantity());
 
         int n = ps.executeUpdate();
         return n;
