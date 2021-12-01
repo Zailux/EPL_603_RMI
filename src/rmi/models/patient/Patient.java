@@ -10,7 +10,6 @@ public class Patient implements Serializable {
     Boolean historyOfSelfHarm;
     String riskIndicator;
     boolean alive;
-    int c_id;
 
 
     public Patient () {}
@@ -49,14 +48,6 @@ public class Patient implements Serializable {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
-    }
-
-    public int getC_id() {
-        return c_id;
-    }
-
-    public void setC_id(int c_id) {
-        this.c_id = c_id;
     }
 
     public String getEmail()

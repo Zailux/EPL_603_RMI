@@ -50,7 +50,7 @@ public class App extends JFrame {
                     ex.printStackTrace();
                 }
 
-                JOptionPane.showMessageDialog(null, "Welcome " + name);
+                JOptionPane.showMessageDialog(null, "Welcome " + user.getName());
                 String role = user.getRole();
                 if (role.equals("doctor") || role.equals("nurse")) {
                     closewin();

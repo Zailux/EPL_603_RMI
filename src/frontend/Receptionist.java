@@ -1,6 +1,12 @@
 package frontend;
 
+import rmi.models.consultation.Consultation;
+import rmi.models.patient.Patient;
+import rmi.models.treatment.Treatment;
 import rmi.services.appointment.AppointmentService;
+import rmi.services.consultation.ConsultationService;
+import rmi.services.patient.PatientService;
+import rmi.services.treatment.TreatmentService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -30,6 +36,7 @@ public class Receptionist {
     private JButton repeaterPrescriptionsButton;
     public JLabel result;
     private JButton showAppointmentsButton;
+    private JButton createPatientButton;
     public static JFrame frame2 = new JFrame("Receptionist");
 
     public Receptionist() {
@@ -46,42 +53,118 @@ public class Receptionist {
         patientSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String value = "";
+                PatientService service = null;
+                Patient patient = null;
+
+                try {
+                    service = (PatientService) Naming.lookup("rmi://localhost:5099/patient");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
 
                 //Object id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
 
-
-                if (idgiven == 1) {
-                    for (int j = 0; j < myArray.length; j++) {
-                        value += myArray[j] + "  ";
-                    }
-                    result.setText(value);
+                try {
+                    patient = service.fetchPatient(idgiven);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
+
+                String value = "Patient ID: " + patient.getId().toString() + " Patient Name: " + patient.getName() + " Patient Email: " + patient.getEmail();
+
+
+                result.setText(value);
 
             }
         });
-        patientKeptsAppointmentButton.addActionListener(new ActionListener() {
+
+        createPatientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int patientid = 1;
-                int apointid = 2;
 
-                String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
-                int idgiven = Integer.parseInt(id);
+                PatientService service = null;
+                Patient patient = null;
 
-                String appoin = JOptionPane.showInputDialog(frame2, "Enter treatment id:");
-                int appointmentgiven = Integer.parseInt(appoin);
+                try {
+                    service = (PatientService) Naming.lookup("rmi://localhost:5099/patient");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
 
-                if ((idgiven == patientid) & (appointmentgiven == apointid)) {
-                    JOptionPane.showMessageDialog(null, "Appointment " + appointmentgiven + " of patient " + idgiven + " cancel");
+                JLabel label = new JLabel("");
+                JTextField field3 = new JTextField("");
+                JTextField field2 = new JTextField("");
+                JTextField field1 = new JTextField("");
+
+                JPanel panel = new JPanel(new GridLayout(10, 10));
+
+
+                panel.add(new JLabel("Name: "));
+                panel.add(field2);
+
+                panel.add(new JLabel("Email address: "));
+                panel.add(field1);
+
+                panel.add(new JLabel("Create patient "));
+
+                panel.add(new JLabel("Risk Indicator "));
+                String t[] = {
+                        "low", "medium", "high"};
+                JComboBox cb = new JComboBox(t);
+                panel.add(cb);
+
+                panel.add(new JLabel("History Of SelfHarm "));
+                String t1[] = {
+                        "True", "False"};
+                JComboBox cb1 = new JComboBox(t1);
+                panel.add(cb1);
+
+                int result = JOptionPane.showConfirmDialog(null, panel, "Patient Created",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    String risk = cb.getItemAt(cb.getSelectedIndex()).toString();
+                    String history = cb1.getItemAt(cb1.getSelectedIndex()).toString();
+                    boolean historyflag;
+                    if (history.equals("True"))
+                        historyflag = true;
+                    else
+                        historyflag = false;
+
+                    String name = (field2.getText());
+                    String mail = (field1.getText());
+
+
+                    try {
+                        patient = service.createPatient(name, mail, historyflag, risk);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    JOptionPane.showMessageDialog(null, "Created patient successfully");
+                    System.out.println(field3.getText());
                 } else {
-                    JOptionPane.showMessageDialog(null, "Appointment or patient not found ");
-
+                    JOptionPane.showMessageDialog(null, "Patient not created");
                 }
             }
         });
+
+
+
         scheduleAppointmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -139,6 +222,28 @@ public class Receptionist {
                 }
             }
         });
+
+        patientKeptsAppointmentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int patientid = 1;
+                int apointid = 2;
+
+                String id = JOptionPane.showInputDialog(frame2, "Enter patient id:");
+                int idgiven = Integer.parseInt(id);
+
+                String appoin = JOptionPane.showInputDialog(frame2, "Enter treatment id:");
+                int appointmentgiven = Integer.parseInt(appoin);
+
+                if ((idgiven == patientid) & (appointmentgiven == apointid)) {
+                    JOptionPane.showMessageDialog(null, "Appointment " + appointmentgiven + " of patient " + idgiven + " cancel");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Appointment or patient not found ");
+
+                }
+            }
+        });
+
         repeaterPrescriptionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,6 +254,7 @@ public class Receptionist {
 
             }
         });
+
         showAppointmentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -164,6 +270,7 @@ public class Receptionist {
 
             }
         });
+
     }
 
     public static void window() {
@@ -189,32 +296,35 @@ public class Receptionist {
      */
     private void $$$setupUI$$$() {
         receptionist = new JPanel();
-        receptionist.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
+        receptionist.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
         EXITButton = new JButton();
         Font EXITButtonFont = this.$$$getFont$$$(null, Font.BOLD, 20, EXITButton.getFont());
         if (EXITButtonFont != null) EXITButton.setFont(EXITButtonFont);
         EXITButton.setText("EXIT");
-        receptionist.add(EXITButton, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTHEAST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        scheduleAppointmentButton = new JButton();
-        scheduleAppointmentButton.setText("Schedule appointment");
-        receptionist.add(scheduleAppointmentButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        patientKeptsAppointmentButton = new JButton();
-        patientKeptsAppointmentButton.setText("Patient kepts appointment");
-        receptionist.add(patientKeptsAppointmentButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        receptionist.add(EXITButton, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTHEAST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         patientSearchButton = new JButton();
         patientSearchButton.setText("Patient Search");
         receptionist.add(patientSearchButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         result = new JLabel();
-        Font resultFont = this.$$$getFont$$$(null, -1, 14, result.getFont());
+        Font resultFont = this.$$$getFont$$$(null, -1, 16, result.getFont());
         if (resultFont != null) result.setFont(resultFont);
         result.setText("");
-        receptionist.add(result, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        receptionist.add(result, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         showAppointmentsButton = new JButton();
         showAppointmentsButton.setText("Show appointments");
         receptionist.add(showAppointmentsButton, new com.intellij.uiDesigner.core.GridConstraints(1, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         repeaterPrescriptionsButton = new JButton();
         repeaterPrescriptionsButton.setText("Repeater prescriptions");
-        receptionist.add(repeaterPrescriptionsButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        receptionist.add(repeaterPrescriptionsButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        createPatientButton = new JButton();
+        createPatientButton.setText("Create Patient");
+        receptionist.add(createPatientButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        scheduleAppointmentButton = new JButton();
+        scheduleAppointmentButton.setText("Schedule appointment");
+        receptionist.add(scheduleAppointmentButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        patientKeptsAppointmentButton = new JButton();
+        patientKeptsAppointmentButton.setText("Patient kepts appointment");
+        receptionist.add(patientKeptsAppointmentButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

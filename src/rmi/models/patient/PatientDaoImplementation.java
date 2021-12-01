@@ -19,7 +19,7 @@ public class PatientDaoImplementation implements PatientDao {
             throws SQLException
     {
 
-        String query= "insert into \"Patient\" (name, historyOfSelfHarm, riskIndicator, email, alive, c_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String query= "insert into \"Patient\" (name, historyOfSelfHarm, riskIndicator, email, alive) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, patient.getName());
@@ -27,7 +27,6 @@ public class PatientDaoImplementation implements PatientDao {
         ps.setString(3, patient.getRiskIndicator());
         ps.setString(4, patient.getEmail());
         ps.setBoolean(5, patient.isAlive());
-        ps.setInt(6, patient.getC_id());
         int n = ps.executeUpdate();
         return n;
     }
@@ -68,7 +67,6 @@ public class PatientDaoImplementation implements PatientDao {
             patient.setRiskIndicator(rs.getString("riskIndicator"));
             patient.setEmail(rs.getString("email"));
             patient.setAlive(rs.getBoolean("alive"));
-            patient.setC_id(rs.getInt("c_id"));
         }
 
         if (check == true) {
@@ -96,7 +94,6 @@ public class PatientDaoImplementation implements PatientDao {
             patient.setRiskIndicator(rs.getString("riskIndicator"));
             patient.setEmail(rs.getString("email"));
             patient.setAlive(rs.getBoolean("alive"));
-            patient.setC_id(rs.getInt("c_id"));
             ls.add(patient);
         }
         return ls;
@@ -108,7 +105,7 @@ public class PatientDaoImplementation implements PatientDao {
     {
 
         String query
-                = "update \"patient\" set name=?, historyOfSelfHarm=?, riskIndicator=?, email=?, alive=?, c_id=? where id = ?";
+                = "update \"patient\" set name=?, historyOfSelfHarm=?, riskIndicator=?, email=?, alive=? where id = ?";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, patient.getName());
@@ -116,8 +113,7 @@ public class PatientDaoImplementation implements PatientDao {
         ps.setString(3, patient.getRiskIndicator());
         ps.setString(4, patient.getEmail());
         ps.setBoolean(5, patient.isAlive());
-        ps.setInt(6, patient.getC_id());
-        ps.setInt(7, patient.getId());
+        ps.setInt(6, patient.getId());
 
         ps.executeUpdate();
     }
