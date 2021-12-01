@@ -8,6 +8,7 @@ import rmi.services.appointment.AppointmentService;
 import rmi.services.consultation.ConsultationService;
 import rmi.services.patient.PatientService;
 import rmi.services.treatment.TreatmentService;
+import rmi.services.user.UserService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -381,11 +382,23 @@ public class Receptionist {
                     int patientid = Integer.parseInt(field1.getText());
                     int doctorid = Integer.parseInt(field2.getText());
 
-
-
-
-                    
-
+                    TreatmentService service = null;
+                    try {
+                        service = (TreatmentService) Naming.lookup("rmi://localhost:5099/treatment");
+                    } catch (NotBoundException ex) {
+                        ex.printStackTrace();
+                    } catch (MalformedURLException ex) {
+                        ex.printStackTrace();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                    try {
+                        service.cloneLastTreatment(patientid, doctorid);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
 
                     JOptionPane.showMessageDialog(null, "Prescription for patient " + patientid + " created from doctor " + doctorid);
                 } else {
