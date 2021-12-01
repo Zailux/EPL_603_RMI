@@ -191,7 +191,9 @@ public class ClinicalStaff {
                     int coun = Integer.parseInt(field1.getText());
 
                     try {
-                        treatment = service.createTreatment(userid, med, date, descr, 0, coun);
+                        if (service != null) {
+                            treatment = service.createTreatment(userid, med, date, "test", "null", coun);
+                        }
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     } catch (SQLException ex) {
