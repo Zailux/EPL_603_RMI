@@ -19,5 +19,5 @@ public interface AppointmentService extends Remote {
 //
     public Appointment fetchAppointment(Integer id) throws RemoteException, SQLException;
 //
-//    public List<Appointment> fetchAppointments() throws RemoteException, SQLException;
+    public List<Appointment> fetchDoctorAppointments(Integer u_id) throws RemoteException, SQLException;
 }

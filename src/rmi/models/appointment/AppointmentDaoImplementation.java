@@ -65,9 +65,10 @@ public class AppointmentDaoImplementation implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getAppointments() throws SQLException {
-        String query = "select * from appointment";
+    public List<Appointment> getDoctorAppointments(Integer u_id) throws SQLException {
+        String query = "select * from \"Appointment\" where u_id=?";
         PreparedStatement ps= con.prepareStatement(query);
+        ps.setInt(1, u_id);
         ResultSet rs = ps.executeQuery();
         List<Appointment> ls = new ArrayList();
 
