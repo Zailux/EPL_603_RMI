@@ -24,8 +24,11 @@ import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -109,11 +112,32 @@ public class ClinicalStaff {
         updateRecordsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ConsultationService service = null;
+
+                try {
+                    service = (ConsultationService) Naming.lookup("rmi://localhost:5099/consultation");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
                 String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
 
                 String cid = JOptionPane.showInputDialog(frame1, "Enter consultation id:");
-                int cidgiven = Integer.parseInt(id);
+                int cidgiven = Integer.parseInt(cid);
+
+                Consultation consultation = null;
+                try {
+                    consultation = service.fetchConsultation(cidgiven);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
 
                 JLabel label = new JLabel("");
                 JTextField field3 = new JTextField("");
@@ -123,29 +147,51 @@ public class ClinicalStaff {
                 panel.add(new JLabel("Update for patient " + id));
 
 
-                panel.add(new JLabel("Create Consultation for patient " + id));
+                panel.add(new JLabel("Update Consultation " + cid + " for patient " + id));
                 String t[] = {
                         "mental", "physical", "viral", "other"};
                 JComboBox cb = new JComboBox(t);
+                cb.setSelectedItem(consultation.getType());
                 panel.add(cb);
+                panel.add(new JLabel("Finished "));
+                String t2[] = {
+                        "true", "false"};
+                JComboBox cb2 = new JComboBox(t2);
+                cb2.setSelectedItem(String.valueOf(consultation.isFinished()));
 
-                panel.add(new JLabel("Comment: "));
-                Component com = panel.add(field3);
-                String comment = com.toString();
+                panel.add(cb2);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                panel.add(new JLabel("Date (dd/MM/yyy)"));
+                JTextField tf = new JTextField(1);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                tf.setText(LocalDate.parse(dateFormat.format(consultation.getDate()), formatter).format(formatter2));
+                panel.add(tf);
 
-                Date curruntdate = Date.from(Instant.now());
-                System.out.println(curruntdate);
 
-                boolean finished = true;
 
-                int result = JOptionPane.showConfirmDialog(null, panel, "Update Patient",
+
+                int result = JOptionPane.showConfirmDialog(null, panel, "Update Consultation",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
-                    String data = "Selected: " + cb.getItemAt(cb.getSelectedIndex());
-                    System.out.println(data);
+                    Date parsed = null;
+                    try {
+                        parsed = format.parse(tf.getText());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                    java.sql.Date sql = new java.sql.Date(parsed.getTime());
+                    try {
+                        service.updateConsultation(cidgiven, consultation.getT_id(), consultation.getP_id(), consultation.getPc_id(), consultation.getU_id(), (String) cb.getItemAt(cb.getSelectedIndex()), sql, Boolean.valueOf((String) cb2.getItemAt(cb2.getSelectedIndex())));
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
 
-                    JOptionPane.showMessageDialog(null, "Updated successfully for patient " + id);
+                    JOptionPane.showMessageDialog(null, "Updated successfully for consultation " + cid);
                     System.out.println(field3.getText());
                 } else {
                     JOptionPane.showMessageDialog(null, "Nothing change for patient " + id);

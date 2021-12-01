@@ -62,7 +62,6 @@ public class TreatmentServant extends UnicastRemoteObject implements TreatmentSe
 
     @Override
     public int cloneLastTreatment(Integer u_id, Integer c_id) throws RemoteException, SQLException {
-        System.out.println(u_id);
         String query= "Insert into \"Treatment\" (u_id, m_id, date, description, quantity, previoust) select T.u_id, T.m_id, T.date, T.description, T.quantity, T.previoust from \"Consultation\" C INNER JOIN \"Treatment\" T on C.t_id=T.id where C.p_id=? AND T.u_id=? order by T.date desc limit 1";
 
         PreparedStatement ps = con.prepareStatement(query);
