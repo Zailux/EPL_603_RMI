@@ -15,7 +15,7 @@ public class TreatmentServant extends UnicastRemoteObject implements TreatmentSe
     }
 
     @Override
-    public Treatment createTreatment(int u_id, int m_id, Date date, String description, String type, int previousT, int quantity) throws RemoteException, SQLException {
+    public Treatment createTreatment(int u_id, int m_id, Date date, String description, int previousT, int quantity) throws RemoteException, SQLException {
         Treatment treatment = new Treatment(u_id, m_id, date, description, previousT, quantity);
 
         TreatmentDaoImplementation treaDao = new TreatmentDaoImplementation();
