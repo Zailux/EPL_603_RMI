@@ -1,6 +1,7 @@
 package rmi.models.treatment;
 
 import java.sql.Date;
+import java.util.Optional;
 
 public class Treatment {
 
@@ -9,7 +10,7 @@ public class Treatment {
     int m_id;
     Date date;
     String description;
-    int previousT;
+    Integer previousT;
     int quantity;
 
     public Treatment () {}
@@ -62,11 +63,11 @@ public class Treatment {
         this.description = description;
     }
 
-    public int getPreviousT() {
+    public Integer getPreviousT() {
         return previousT;
     }
 
-    public void setPreviousT(int previousT) {
+    public void setPreviousT( Integer previousT) {
         this.previousT = previousT;
     }
 
@@ -77,6 +78,6 @@ public class Treatment {
         this.description = description;
         this.date = date;
         this.quantity = quantity;
-        this.previousT =  previousT;
+        this.previousT = previousT;
     }
 }
