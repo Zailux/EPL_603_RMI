@@ -1,5 +1,6 @@
 package frontend;
 
+import rmi.models.appointment.Appointment;
 import rmi.models.consultation.Consultation;
 import rmi.models.record.Record;
 import rmi.models.treatment.Treatment;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
 import static frontend.App.name;
 
@@ -49,11 +51,10 @@ public class ClinicalStaff {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String value = "";
-                int id = 1;
 
                 //Object id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
-                String ids = JOptionPane.showInputDialog(frame1, "Enter patient id:");
-                int idgiven = Integer.parseInt(ids);
+                String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
+                int idgiven = Integer.parseInt(id);
 
                 RecordService service = null;
                 List<Record> records = null;
@@ -73,6 +74,34 @@ public class ClinicalStaff {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+
+                Record rec;
+                DefaultListModel<String> l1 = new DefaultListModel<>();
+                l1.addElement("Records for patient " + id);
+                l1.addElement("\n\n\n");
+
+                for (int i = 0; i < records.size(); i++) {
+                    rec = records.get(i);
+
+                    l1.addElement("Consultation type:  " + rec.getConsultation_type());
+                    l1.addElement("\nConsultation date:  " + rec.getConsultation_date());
+                    l1.addElement("\nTreatment description:  " + rec.getTreatment_description());
+                    l1.addElement("\nTreatment date:  " + rec.getTreatment_date());
+                    l1.addElement("\nTreatment quantity:  " + rec.getTreatment_quantity());
+                }
+
+
+                JFrame f;
+                f = new JFrame();
+                JList<String> list = new JList<>(l1);
+                list.setBounds(0, 0, 750, 750);
+                f.add(list);
+                list.setFont(new Font(null, Font.BOLD, 18));
+                f.setSize(750, 750);
+                f.setLayout(null);
+                f.setVisible(true);
+
+
                 System.out.println(records);
             }
         });
@@ -325,7 +354,7 @@ public class ClinicalStaff {
                 int idgiven = Integer.parseInt(ids);
 
 
-                    result.setText(value);
+                result.setText(value);
 
             }
         });

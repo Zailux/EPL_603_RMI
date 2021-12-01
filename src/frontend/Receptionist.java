@@ -384,7 +384,7 @@ public class Receptionist {
 
 
 
-                    
+
 
 
                     JOptionPane.showMessageDialog(null, "Prescription for patient " + patientid + " created from doctor " + doctorid);
