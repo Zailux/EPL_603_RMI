@@ -1,5 +1,12 @@
 package frontend;
 
+import rmi.models.consultation.Consultation;
+import rmi.models.treatment.Treatment;
+import rmi.models.user.User;
+import rmi.services.consultation.ConsultationService;
+import rmi.services.treatment.TreatmentService;
+import rmi.services.user.UserService;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
@@ -7,10 +14,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.text.DateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
+
+import static frontend.App.name;
 
 public class ClinicalStaff {
     private JPanel ClinicalStaff;
@@ -104,30 +119,90 @@ public class ClinicalStaff {
         createTreatmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                TreatmentService service = null;
+                Treatment treatment = null;
+
+                try {
+                    service = (TreatmentService) Naming.lookup("rmi://localhost:5099/treatment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                UserService service1 = null;
+                User user = null;
+
+                try {
+                    service1 = (UserService) Naming.lookup("rmi://localhost:5099/user");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                try {
+                    user = service1.loginUser(name);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                int userid = user.getId();
+
+
                 String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
-                //user id
+
 
                 JLabel label = new JLabel("");
                 JTextField field3 = new JTextField("");
+                JTextField field2 = new JTextField("");
+                JTextField field1 = new JTextField("");
 
                 JPanel panel = new JPanel(new GridLayout(10, 10));
+
+                panel.add(new JLabel("Medicine ID: "));
+                panel.add(field2);
+
+                panel.add(new JLabel("Quantity: "));
+                panel.add(field1);
+
 
                 panel.add(new JLabel("Description: "));
                 Component com = panel.add(field3);
                 String descr = com.toString();
 
-                Date curruntdate = Date.from(Instant.now());
+                long millis = System.currentTimeMillis();
+                java.sql.Date date = new java.sql.Date(millis);
+                System.out.println(date);
 
                 int result = JOptionPane.showConfirmDialog(null, panel, "Update Patient",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
-                    System.out.println(curruntdate);
-                    JOptionPane.showMessageDialog(null, "Updated successfully for patient " + id);
+
+                    int med = Integer.parseInt(field2.getText());
+                    int coun = Integer.parseInt(field1.getText());
+
+                    try {
+                        treatment = service.createTreatment(userid, med, date, descr, 0, coun);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    System.out.println(date);
+                    JOptionPane.showMessageDialog(null, "Created successfully for patient " + id);
                     System.out.println(" " + field3.getText());
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nothing change for patient " + id);
+                    JOptionPane.showMessageDialog(null, "Nothing created for patient " + id);
                 }
 
             }
@@ -139,6 +214,43 @@ public class ClinicalStaff {
                 String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
                 int idgiven = Integer.parseInt(id);
                 //user id
+
+                ConsultationService service = null;
+                Consultation consultation = null;
+
+                try {
+                    service = (ConsultationService) Naming.lookup("rmi://localhost:5099/consultation");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                UserService service1 = null;
+                User user = null;
+
+                try {
+                    service1 = (UserService) Naming.lookup("rmi://localhost:5099/user");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+                try {
+                    user = service1.loginUser(name);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                int userid = user.getId();
+
 
                 JLabel label = new JLabel("");
                 JTextField field1 = new JTextField("");
@@ -156,21 +268,31 @@ public class ClinicalStaff {
                 Component com = panel.add(field3);
                 String comment = com.toString();
 
-                Date curruntdate = Date.from(Instant.now());
+                //Date curruntdate = Date.from(Instant.now());
 
-                boolean finished = true;
+                long millis = System.currentTimeMillis();
+                java.sql.Date date = new java.sql.Date(millis);
+                System.out.println(date);
 
-                int result = JOptionPane.showConfirmDialog(null, panel, "Update Patient",
+
+                int result = JOptionPane.showConfirmDialog(null, panel, "Create Consultation",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
-                    String data = "Selected: " + cb.getItemAt(cb.getSelectedIndex());
+                    String data = cb.getItemAt(cb.getSelectedIndex()).toString();
+
+                    try {
+                        consultation = service.createConsultation(1, idgiven, 1, userid, data, date, true);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Created successfully for patient " + id);
                     System.out.println(data);
-                    System.out.println(curruntdate);
-                    JOptionPane.showMessageDialog(null, "Updated successfully for patient " + id);
                     System.out.println(" " + field3.getText());
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nothing change for patient " + id);
+                    JOptionPane.showMessageDialog(null, "Nothing created for patient " + id);
                 }
 
 
@@ -279,6 +401,7 @@ public class ClinicalStaff {
     public JComponent $$$getRootComponent$$$() {
         return ClinicalStaff;
     }
+
 }
 
 

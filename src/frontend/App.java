@@ -49,6 +49,7 @@ public class App extends JFrame {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+
                 JOptionPane.showMessageDialog(null, "Welcome " + name);
                 String role = user.getRole();
                 if (role.equals("doctor") || role.equals("nurse")) {
