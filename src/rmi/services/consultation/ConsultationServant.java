@@ -17,8 +17,8 @@ public class ConsultationServant extends UnicastRemoteObject implements Consulta
     }
 
     @Override
-    public Consultation createConsultation(int t_id, int p_id, int pc_id, int u_id, String type, Date date, boolean finished) throws RemoteException, SQLException {
-        Consultation consultation = new Consultation(t_id, p_id, pc_id, u_id, type, date, finished);
+    public Consultation createConsultation(int t_id, int p_id, int u_id, String type, Date date, boolean finished) throws RemoteException, SQLException {
+        Consultation consultation = new Consultation(t_id, p_id, u_id, type, date, finished);
 
         ConsultationDaoImplementation consDao = new ConsultationDaoImplementation();
         consDao.add(consultation);
@@ -34,8 +34,8 @@ public class ConsultationServant extends UnicastRemoteObject implements Consulta
     }
 
     @Override
-    public Consultation updateConsultation(int id, int t_id, int p_id, int pc_id, int u_id, String type, Date date, boolean finished) throws RemoteException, SQLException {
-        Consultation consultation = new Consultation(t_id, p_id, pc_id, u_id, type, date, finished);
+    public Consultation updateConsultation(int id, int t_id, int p_id, int u_id, String type, Date date, boolean finished) throws RemoteException, SQLException {
+        Consultation consultation = new Consultation(t_id, p_id, u_id, type, date, finished);
         consultation.setId(id);
 
         ConsultationDaoImplementation consDao = new ConsultationDaoImplementation();

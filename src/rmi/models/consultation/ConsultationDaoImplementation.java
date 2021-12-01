@@ -15,7 +15,7 @@ public class ConsultationDaoImplementation implements ConsultationDao {
 
     @Override
     public int add(Consultation consultation) throws SQLException {
-        String query = "insert into \"Consultation\"(t_id, p_id, u_id, type, date, finished) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into \"Consultation\"(t_id, p_id, u_id, type, date, finished) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setInt(1, consultation.getT_id());

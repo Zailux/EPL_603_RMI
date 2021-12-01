@@ -155,6 +155,7 @@ public class ClinicalStaff {
                 JComboBox cb = new JComboBox(t);
                 cb.setSelectedItem(consultation.getType());
                 panel.add(cb);
+
                 panel.add(new JLabel("Finished "));
                 String t2[] = {
                         "true", "false"};
@@ -184,7 +185,7 @@ public class ClinicalStaff {
                     }
                     java.sql.Date sql = new java.sql.Date(parsed.getTime());
                     try {
-                        service.updateConsultation(cidgiven, consultation.getT_id(), consultation.getP_id(), consultation.getPc_id(), consultation.getU_id(), (String) cb.getItemAt(cb.getSelectedIndex()), sql, Boolean.valueOf((String) cb2.getItemAt(cb2.getSelectedIndex())));
+                        service.updateConsultation(cidgiven, consultation.getT_id(), consultation.getP_id(), consultation.getU_id(), (String) cb.getItemAt(cb.getSelectedIndex()), sql, Boolean.valueOf((String) cb2.getItemAt(cb2.getSelectedIndex())));
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     } catch (SQLException ex) {
@@ -329,88 +330,95 @@ public class ClinicalStaff {
                                                            ActionListener() {
                                                                @Override
                                                                public void actionPerformed(ActionEvent e) {
-                                                                   String id = JOptionPane.showInputDialog(frame1, "Enter patient id:");
-                                                                   int idgiven = Integer.parseInt(id);
-                                                                   //user id
-
-                                                                   ConsultationService service = null;
-                                                                   Consultation consultation = null;
-
-                                                                   try {
-                                                                       service = (ConsultationService) Naming.lookup("rmi://localhost:5099/consultation");
-                                                                   } catch (NotBoundException ex) {
-                                                                       ex.printStackTrace();
-                                                                   } catch (MalformedURLException ex) {
-                                                                       ex.printStackTrace();
-                                                                   } catch (RemoteException ex) {
-                                                                       ex.printStackTrace();
-                                                                   }
-
-                                                                   UserService service1 = null;
-                                                                   User user = null;
-
-                                                                   try {
-                                                                       service1 = (UserService) Naming.lookup("rmi://localhost:5099/user");
-                                                                   } catch (NotBoundException ex) {
-                                                                       ex.printStackTrace();
-                                                                   } catch (MalformedURLException ex) {
-                                                                       ex.printStackTrace();
-                                                                   } catch (RemoteException ex) {
-                                                                       ex.printStackTrace();
-                                                                   }
-
-                                                                   try {
-                                                                       user = service1.loginUser(name);
-                                                                   } catch (RemoteException ex) {
-                                                                       ex.printStackTrace();
-                                                                   } catch (SQLException ex) {
-                                                                       ex.printStackTrace();
-                                                                   }
-
-                                                                   int userid = user.getId();
-
-
                                                                    JLabel label = new JLabel("");
                                                                    JTextField field1 = new JTextField("");
                                                                    JTextField field2 = new JTextField("");
                                                                    JTextField field3 = new JTextField("");
+                                                                   JTextField field4 = new JTextField("");
 
-                                                                   JPanel panel = new JPanel(new GridLayout(10, 10));
-                                                                   panel.add(new JLabel("Create Consultation for patient " + id));
+
+                                                                   JPanel panel2 = new JPanel(new GridLayout(10, 10));
+
+                                                                   panel2.add(new JLabel("Patient id:: "));
+                                                                   panel2.add(field1);
+
+                                                                   panel2.add(new JLabel("Doctor id: "));
+                                                                   panel2.add(field2);
+
+                                                                   panel2.add(new JLabel("Treatment id: "));
+                                                                   panel2.add(field3);
+
+                                                                   panel2.add(new JLabel("Date (dd/MM/yyyy)"));
+                                                                   panel2.add(field4);
+
+                                                                   panel2.add(new JLabel("Type"));
                                                                    String t[] = {
                                                                            "mental", "physical", "viral", "other"};
                                                                    JComboBox cb = new JComboBox(t);
-                                                                   panel.add(cb);
+                                                                   panel2.add(cb);
 
-                                                                   panel.add(new JLabel("Comment: "));
-                                                                   Component com = panel.add(field3);
-                                                                   String comment = com.toString();
-
-                                                                   //Date curruntdate = Date.from(Instant.now());
-
-                                                                   long millis = System.currentTimeMillis();
-                                                                   java.sql.Date date = new java.sql.Date(millis);
-                                                                   System.out.println(date);
+                                                                   panel2.add(new JLabel("Finished "));
+                                                                   String t2[] = {
+                                                                           "true", "false"};
+                                                                   JComboBox cb1 = new JComboBox(t2);
+                                                                   panel2.add(cb1);
 
 
-                                                                   int result = JOptionPane.showConfirmDialog(null, panel, "Create Consultation",
+                                                                   int result = JOptionPane.showConfirmDialog(null, panel2, "Consultation Created",
                                                                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                                                                    if (result == JOptionPane.OK_OPTION) {
-                                                                       String data = cb.getItemAt(cb.getSelectedIndex()).toString();
+                                                                       int patientid = Integer.parseInt(field1.getText());
+                                                                       int doctorid = Integer.parseInt(field2.getText());
+                                                                       int treatmentid = Integer.parseInt(field3.getText());
+
+                                                                       String type = cb.getItemAt(cb.getSelectedIndex()).toString();
+                                                                       String finish = cb1.getItemAt(cb1.getSelectedIndex()).toString();
+                                                                       boolean finished;
+                                                                       if (finish.equals("true"))
+                                                                           finished = true;
+                                                                       else
+                                                                           finished = false;
+
+                                                                       SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                                                                       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                                                       DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                                                       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+
+                                                                       Date parsed = null;
+                                                                       try {
+                                                                           parsed = format.parse(field4.getText());
+                                                                       } catch (ParseException ex) {
+                                                                           ex.printStackTrace();
+                                                                       }
+                                                                       java.sql.Date sql = new java.sql.Date(parsed.getTime());
+
+                                                                       ConsultationService service = null;
+                                                                       Consultation consultation = null;
 
                                                                        try {
-                                                                           consultation = service.createConsultation(1, idgiven, 1, userid, data, date, true);
+                                                                           service = (ConsultationService) Naming.lookup("rmi://localhost:5099/consultation");
+                                                                       } catch (NotBoundException ex) {
+                                                                           ex.printStackTrace();
+                                                                       } catch (MalformedURLException ex) {
+                                                                           ex.printStackTrace();
+                                                                       } catch (RemoteException ex) {
+                                                                           ex.printStackTrace();
+                                                                       }
+
+                                                                       try {
+                                                                           consultation = service.createConsultation(treatmentid, patientid, doctorid, type, sql, finished);
                                                                        } catch (RemoteException ex) {
                                                                            ex.printStackTrace();
                                                                        } catch (SQLException ex) {
                                                                            ex.printStackTrace();
                                                                        }
-                                                                       JOptionPane.showMessageDialog(null, "Created successfully for patient " + id);
-                                                                       System.out.println(data);
+                                                                       JOptionPane.showMessageDialog(null, "Created successfully for patient " + patientid);
+                                                                       System.out.println(type);
                                                                        System.out.println(" " + field3.getText());
                                                                    } else {
-                                                                       JOptionPane.showMessageDialog(null, "Nothing created for patient " + id);
+                                                                       JOptionPane.showMessageDialog(null, "Nothing created for patient ");
                                                                    }
 
 

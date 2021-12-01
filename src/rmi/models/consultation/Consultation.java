@@ -21,11 +21,10 @@ public class Consultation implements Serializable {
 
     public Consultation () {}
 
-    public Consultation(int t_id,int p_id,int pc_id, int u_id, String type, Date date, boolean finished)
+    public Consultation(int t_id,int p_id, int u_id, String type, Date date, boolean finished)
     {
         this.t_id = t_id;
         this.p_id = p_id;
-        this.pc_id = pc_id;
         this.u_id = u_id;
         this.type = type;
         this.date = date;
