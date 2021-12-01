@@ -14,7 +14,7 @@ public class TreatmentDaoImplementation implements TreatmentDao{
     @Override
     public int add(Treatment treatment) throws SQLException {
 
-        String query= "insert into \"Treatment\"(u_id, m_id, date, description, previousT) VALUES (?, ?, ?, ?, ?)";
+        String query= "insert into \"Treatment\"(u_id, m_id, date, description, previousT, quantity) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, treatment.getU_id());
         ps.setInt(2, treatment.getM_id());

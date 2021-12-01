@@ -21,7 +21,7 @@ public class Consultation implements Serializable {
 
     public Consultation () {}
 
-    public Consultation(int t_id,int p_id,int pc_id, int u_id,String type, Date date, boolean finished)
+    public Consultation(int t_id,int p_id,int pc_id, int u_id, String type, Date date, boolean finished)
     {
         this.t_id = t_id;
         this.p_id = p_id;
