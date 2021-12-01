@@ -15,4 +15,6 @@ public interface TreatmentService extends Remote {
     public Treatment fetchTreatment(Integer id) throws RemoteException, SQLException;
 
     public int cloneLastTreatment(Integer u_id, Integer c_id) throws RemoteException, SQLException;
+
+    public Treatment fetchPatientLatestTreatment(Integer p_id) throws  RemoteException, SQLException;
 }

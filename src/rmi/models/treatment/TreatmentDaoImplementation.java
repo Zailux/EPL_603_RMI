@@ -16,7 +16,7 @@ public class TreatmentDaoImplementation implements TreatmentDao{
 
         if (treatment.getPreviousT() == null) {
 
-            String query= "insert into \"Treatment\"(u_id, m_id, date, description, \"previousT\", quantity) VALUES (?, ?, ?, ?, NULL, ?)";
+            String query= "insert into \"Treatment\"(u_id, m_id, date, \"description\", \"previousT\", quantity) VALUES (?, ?, ?, ?, NULL, ?)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, treatment.getU_id());
             ps.setInt(2, treatment.getM_id());

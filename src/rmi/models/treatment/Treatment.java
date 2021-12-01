@@ -1,9 +1,10 @@
 package rmi.models.treatment;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Optional;
 
-public class Treatment {
+public class Treatment implements Serializable {
 
     int id;
     int u_id;

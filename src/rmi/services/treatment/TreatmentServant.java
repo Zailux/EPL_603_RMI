@@ -7,10 +7,7 @@ import rmi.models.treatment.TreatmentDaoImplementation;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class TreatmentServant extends UnicastRemoteObject implements TreatmentService, Serializable {
 
@@ -69,5 +66,31 @@ public class TreatmentServant extends UnicastRemoteObject implements TreatmentSe
         ps.setInt(2, c_id);
         int n = ps.executeUpdate();
         return n;
+    }
+
+    @Override
+    public Treatment fetchPatientLatestTreatment(Integer p_id) throws RemoteException, SQLException {
+        String query = "select T.* from \"Consultation\" C inner join \"Treatment\" T on C.t_id=T.id where c.p_id=? ORDER BY T.date DESC LIMIT 1";
+        PreparedStatement ps = con.prepareStatement(query);
+
+        ps.setInt(1, p_id);
+        Treatment treatment = new Treatment();
+        ResultSet rs = ps.executeQuery();
+        boolean check = false;
+
+        while (rs.next()) {
+            check = true;
+            treatment.setId(rs.getInt("id"));
+            treatment.setU_id(rs.getInt("u_id"));
+            treatment.setM_id(rs.getInt("m_id"));
+            treatment.setDate(rs.getDate("date"));
+            treatment.setDescription(rs.getString("description"));
+            treatment.setPreviousT(rs.getInt("previousT"));
+        }
+
+        if (check == true) {
+            return treatment;
+        } else
+            return null;
     }
 }
