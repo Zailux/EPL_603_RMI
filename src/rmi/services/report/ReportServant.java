@@ -10,11 +10,12 @@ import rmi.models.report.WeeklyPatientsPerType.WeeklyPatientsPerType;
 import rmi.models.treatment.Treatment;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportServant implements  ReportService{
+public class ReportServant extends UnicastRemoteObject implements  ReportService{
     static Connection con = Postgres.getConnection();
 
     public ReportServant() throws RemoteException {
@@ -26,8 +27,8 @@ public class ReportServant implements  ReportService{
         String query = "select COUNT(DISTINCT p_id) AS monthly_patients from \"Appointment\" where attended=true AND EXTRACT(MONTH FROM date)=? AND EXTRACT (YEAR FROM DATE)=?";
         PreparedStatement ps = con.prepareStatement(query);
 
-        ps.setString(1, month);
-        ps.setString(2, year);
+        ps.setInt(1, Integer.parseInt(month));
+        ps.setInt(2, Integer.parseInt(year));
         MonthlyPatients patients = new MonthlyPatients();
         ResultSet rs = ps.executeQuery();
         boolean check = false;
@@ -45,11 +46,12 @@ public class ReportServant implements  ReportService{
 
     @Override
     public MonthlyDrugs fetchMonthlyDrugs(String month, String year) throws RemoteException, SQLException {
+
         String query = "select COUNT(quantity) AS monthly_drugs from \"Treatment\" where EXTRACT(MONTH FROM date)=? AND EXTRACT (YEAR FROM DATE)=?";
         PreparedStatement ps = con.prepareStatement(query);
 
-        ps.setString(1, month);
-        ps.setString(2, year);
+        ps.setInt(1, Integer.parseInt(month));
+        ps.setInt(2, Integer.parseInt(year));
         MonthlyDrugs drugs = new MonthlyDrugs();
         ResultSet rs = ps.executeQuery();
         boolean check = false;
@@ -76,7 +78,7 @@ public class ReportServant implements  ReportService{
 
         while (rs.next()) {
             check = true;
-            patients.setWeekly_patients(rs.getInt("monthly_patients"));
+            patients.setWeekly_patients(rs.getInt("weekly_patients"));
         }
 
         if (check == true) {
@@ -113,7 +115,7 @@ public class ReportServant implements  ReportService{
             drug.setId(rs.getInt("id"));
             drug.setDescription(rs.getString("description"));
             drug.setBrand(rs.getString("brand"));
-            drug.setId(rs.getInt("weekly_drugs"));
+            drug.setMonthly_drugs(rs.getInt("weekly_drugs"));
             ls.add(drug);
         }
         return ls;

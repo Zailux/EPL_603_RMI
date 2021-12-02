@@ -66,7 +66,7 @@ public class App extends JFrame {
                     closewin();
                     MedicalRecordsStaff.window();
                 }
-                else if (role.equals(""))
+                else if (role.equals("healthService"))
                 {
                     closewin();
                     HealthServiceManagement.window();

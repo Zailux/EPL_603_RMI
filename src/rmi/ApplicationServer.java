@@ -5,6 +5,7 @@ import rmi.services.consultation.ConsultationServant;
 import rmi.services.medicine.MedicineServant;
 import rmi.services.patient.PatientServant;
 import rmi.services.record.RecordServant;
+import rmi.services.report.ReportServant;
 import rmi.services.treatment.TreatmentServant;
 import rmi.services.user.UserServant;
 
@@ -17,6 +18,7 @@ public  class ApplicationServer {
     public static void main(String[] args) throws RemoteException, SQLException {
 
         Registry registry = LocateRegistry.createRegistry(5099);
+        registry.rebind("report", new ReportServant());
         registry.rebind("patient", new PatientServant());
         registry.rebind("user", new UserServant());
         registry.rebind("consultation", new ConsultationServant());
@@ -24,6 +26,5 @@ public  class ApplicationServer {
         registry.rebind("medicine", new MedicineServant());
         registry.rebind("appointment", new AppointmentServant());
         registry.rebind("record", new RecordServant());
-        registry.rebind("report", new RecordServant());
     }
 }

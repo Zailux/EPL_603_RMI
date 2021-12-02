@@ -368,23 +368,39 @@ public class Receptionist {
                 JPanel panel2 = new JPanel(new GridLayout(10, 10));
                 panel2.add(new JLabel("Prescriptions repeat"));
 
-                panel2.add(new JLabel("Patient id:: "));
+                panel2.add(new JLabel("Patient id: "));
                 panel2.add(field1);
 
                 panel2.add(new JLabel("Doctor id: "));
                 panel2.add(field2);
 
-                int result = JOptionPane.showConfirmDialog(null, panel2, "Prescription Created",
+                int result = JOptionPane.showConfirmDialog(null, panel2, "Repeater Prescription Created",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                TreatmentService service1 = null;
+                Treatment tret = null;
+
+                try {
+                    service1 = (TreatmentService) Naming.lookup("rmi://localhost:5099/treatment");
+                } catch (NotBoundException ex) {
+                    ex.printStackTrace();
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
 
                 if (result == JOptionPane.OK_OPTION) {
                     int patientid = Integer.parseInt(field1.getText());
                     int doctorid = Integer.parseInt(field2.getText());
 
-
-
-
-
+                    try {
+                        service1.cloneLastTreatment(patientid, doctorid);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
 
 
                     JOptionPane.showMessageDialog(null, "Prescription for patient " + patientid + " created from doctor " + doctorid);
