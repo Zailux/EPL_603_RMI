@@ -66,12 +66,10 @@ public class ReportServant implements  ReportService{
     }
 
     @Override
-    public WeeklyPatients fetchWeeklyPatients(Date date) throws RemoteException, SQLException {
-        String query = "select date, count(DISTINCT p_id ) as weekly_patients from \"Appointment\" where date > ? - interval '7 days' GROUP BY date";
-        //current_date
+    public WeeklyPatients fetchWeeklyPatients() throws RemoteException, SQLException {
+        String query = "select date, count(DISTINCT p_id ) as weekly_patients from \"Appointment\" where date > current_date - interval '7 days' GROUP BY date";
         PreparedStatement ps = con.prepareStatement(query);
 
-        ps.setDate(1, date);
         WeeklyPatients patients = new WeeklyPatients();
         ResultSet rs = ps.executeQuery();
         boolean check = false;
@@ -88,10 +86,9 @@ public class ReportServant implements  ReportService{
     }
 
     @Override
-    public List<WeeklyPatientsPerType> fetchWeeklyPatientsPerType(Date date) throws RemoteException, SQLException {
-        String query = "select type, count(  distinct p_id ) as weekly_patients from \"Consultation\" where date > ? - interval '7 days' GROUP BY type";
+    public List<WeeklyPatientsPerType> fetchWeeklyPatientsPerType() throws RemoteException, SQLException {
+        String query = "select type, count(  distinct p_id ) as weekly_patients from \"Consultation\" where date > current_date - interval '7 days' GROUP BY type";
         PreparedStatement ps= con.prepareStatement(query);
-        ps.setDate(1, date);
         ResultSet rs = ps.executeQuery();
         List<WeeklyPatientsPerType> ls = new ArrayList();
 
@@ -105,10 +102,9 @@ public class ReportServant implements  ReportService{
     }
 
     @Override
-    public List<WeeklyAmountsPerDrug> fetchWeeklyAmountsPerDrug(Date date) throws RemoteException, SQLException {
-        String query = "select M.*, COUNT(quantity) AS weekly_drugs from \"Treatment\" T INNER JOIN \"Medicine\" M on T.m_id=M.id where T.date > ? - interval '7 days' GROUP BY M.id, M.brand, M.description ";
+    public List<WeeklyAmountsPerDrug> fetchWeeklyAmountsPerDrug() throws RemoteException, SQLException {
+        String query = "select M.*, COUNT(quantity) AS weekly_drugs from \"Treatment\" T INNER JOIN \"Medicine\" M on T.m_id=M.id where T.date > current_date - interval '7 days' GROUP BY M.id, M.brand, M.description ";
         PreparedStatement ps= con.prepareStatement(query);
-        ps.setDate(1, date);
         ResultSet rs = ps.executeQuery();
         List<WeeklyAmountsPerDrug> ls = new ArrayList();
 

@@ -20,9 +20,9 @@ public interface ReportService extends Remote {
 
     public MonthlyDrugs fetchMonthlyDrugs(String month, String year) throws RemoteException, SQLException;
 
-    public WeeklyPatients fetchWeeklyPatients(Date date) throws RemoteException, SQLException;
+    public WeeklyPatients fetchWeeklyPatients() throws RemoteException, SQLException;
 
-    public List<WeeklyPatientsPerType> fetchWeeklyPatientsPerType(Date date) throws RemoteException, SQLException;
+    public List<WeeklyPatientsPerType> fetchWeeklyPatientsPerType() throws RemoteException, SQLException;
 
-    public List<WeeklyAmountsPerDrug> fetchWeeklyAmountsPerDrug(Date date) throws RemoteException, SQLException;
+    public List<WeeklyAmountsPerDrug> fetchWeeklyAmountsPerDrug() throws RemoteException, SQLException;
 }
