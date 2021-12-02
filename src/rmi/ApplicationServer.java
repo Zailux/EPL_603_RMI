@@ -24,5 +24,6 @@ public  class ApplicationServer {
         registry.rebind("medicine", new MedicineServant());
         registry.rebind("appointment", new AppointmentServant());
         registry.rebind("record", new RecordServant());
+        registry.rebind("report", new RecordServant());
     }
 }
