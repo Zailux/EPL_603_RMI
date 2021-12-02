@@ -455,7 +455,7 @@ public class ClinicalStaff {
                                                                       ex.printStackTrace();
                                                                   }
                                                                   result.setText("Description: " + medicine.getDescription());
-
+                                                                  frame1.resize(750, 750);
                                                               }
                                                           });
     }

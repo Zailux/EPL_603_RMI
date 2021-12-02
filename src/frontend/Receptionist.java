@@ -81,6 +81,7 @@ public class Receptionist {
 
 
                 result.setText(value);
+                frame2.resize(1000, 500);
 
             }
         });
